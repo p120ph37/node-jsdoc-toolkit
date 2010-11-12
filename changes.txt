@@ -1,3 +1,6 @@
+== 2.4.0n ==
+  * Ported to run on Node.JS
+
 == 2.4.0 ==
 
   * Fixed bug that added mutiple symbols with the same name to docs.
