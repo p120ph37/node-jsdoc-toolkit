@@ -13,7 +13,7 @@ var path = require('path');
 var Script = process.binding('evals').Script;
 
 // define a few globals to be compatible with jsrun.jar
-global.arguments = process.argv.slice(2);
+global.arguments = global.internal_args || process.argv.slice(2);
 load = function(file) {
 	Script.runInThisContext(fs.readFileSync(file), file);
 };
