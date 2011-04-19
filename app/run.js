@@ -1,4 +1,3 @@
-#!/usr/bin/node
 /**
  * @fileOverview
  * A bootstrap script that creates some basic required objects
