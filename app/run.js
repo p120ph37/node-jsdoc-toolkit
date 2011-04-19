@@ -9,10 +9,11 @@
 
 // load the node.js libraries to be abstracted
 var fs = require('fs');
+var path = require('path');
 var Script = process.binding('evals').Script;
 
 // define a few globals to be compatible with jsrun.jar
-global.arguments = process.argv.slice(2);
+global.arguments = global.internal_args || process.argv.slice(2);
 load = function(file) {
 	Script.runInThisContext(fs.readFileSync(file), file);
 };
@@ -48,11 +49,11 @@ LOG.out = undefined;
  *	@class Manipulate a filepath.
  */
 FilePath = function(absPath, separator) {
-	this.slash =  separator || "/"; 
+	this.slash =  separator || "/";
 	this.root = this.slash;
 	this.path = [];
 	this.file = "";
-	
+
 	var parts = absPath.split(/[\\\/]/);
 	if (parts) {
 		if (parts.length) this.root = parts.shift() + this.slash;
@@ -159,18 +160,14 @@ IO = {
 	 */
 	copyFile: function(/**string*/ inFile, /**string*/ outDir, /**string*/ fileName) {
 		if (fileName == null) fileName = FilePath.fileName(inFile);
-	
-		var inFile = fs.openSync(inFile, "r");
-		var outFile = fs.openSync(outDir+"/"+fileName, "w");
-		
-		var buf = new Buffer(4096);
-		
-		while (fs.readSync(inFile, buf, 0, buf.length) > 0) {
-			fs.writeSync(outFile, buf);
-		}
-		
-		fs.closeSync(inFile);
-		fs.closeSync(outFile);
+	  inFile = path.normalize(inFile);
+    outFile = path.normalize(outDir + "/" + fileName);
+    if (!path.existsSync(inFile)) {
+      // Could not find file to copy, ignoring: ' + inFile
+      // Should we log or safe to ignore?
+      return;
+    };
+    fs.createReadStream(inFile).pipe(fs.createWriteStream(outFile));
 	},
 
 	/**
@@ -285,7 +282,7 @@ IO = {
 	includeDir: function(path) {
 		if (!path) return;
 		
-		for (var lib = IO.ls(SYS.pwd+path), i = 0; i < lib.length; i++) 
+		for (var lib = IO.ls(SYS.pwd+path), i = 0; i < lib.length; i++)
 			if (/\.js$/i.test(lib[i])) load(lib[i]);
 	}
 }
