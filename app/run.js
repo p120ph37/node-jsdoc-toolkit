@@ -9,10 +9,11 @@
 
 // load the node.js libraries to be abstracted
 var fs = require('fs');
+var path = require('path');
 var Script = process.binding('evals').Script;
 
 // define a few globals to be compatible with jsrun.jar
-global.arguments = process.argv.slice(2);
+global.arguments = global.internal_args || process.argv.slice(2);
 load = function(file) {
 	Script.runInThisContext(fs.readFileSync(file), file);
 };
@@ -26,7 +27,7 @@ LOG = {
 	warn: function(msg, e) {
 		if (JSDOC.opt.q) return;
 		if (e) msg = e.fileName+", line "+e.lineNumber+": "+msg;
-		
+
 		msg = ">> WARNING: "+msg;
 		LOG.warnings.push(msg);
 		if (LOG.out) LOG.out.write(msg+"\n");
@@ -48,18 +49,18 @@ LOG.out = undefined;
  *	@class Manipulate a filepath.
  */
 FilePath = function(absPath, separator) {
-	this.slash =  separator || "/"; 
+	this.slash =  separator || "/";
 	this.root = this.slash;
 	this.path = [];
 	this.file = "";
-	
+
 	var parts = absPath.split(/[\\\/]/);
 	if (parts) {
 		if (parts.length) this.root = parts.shift() + this.slash;
 		if (parts.length) this.file = parts.pop();
 		if (parts.length) this.path = parts;
 	}
-	
+
 	this.path = this.resolvePath();
 }
 
@@ -144,7 +145,7 @@ IO = {
 	saveFile: function(/**string*/ outDir, /**string*/ fileName, /**string*/ content) {
 		fs.writeFileSync(outDir + "/" + fileName, content, IO.encoding);
 	},
-	
+
 	/**
 	 * @type string
 	 */
@@ -153,24 +154,20 @@ IO = {
 	},
 
 	/**
-	 * @param inFile 
+	 * @param inFile
 	 * @param outDir
 	 * @param [fileName=The original filename]
 	 */
 	copyFile: function(/**string*/ inFile, /**string*/ outDir, /**string*/ fileName) {
 		if (fileName == null) fileName = FilePath.fileName(inFile);
-	
-		var inFile = fs.openSync(inFile, "r");
-		var outFile = fs.openSync(outDir+"/"+fileName, "w");
-		
-		var buf = new Buffer(4096);
-		
-		while (fs.readSync(inFile, buf, 0, buf.length) > 0) {
-			fs.writeSync(outFile, buf);
-		}
-		
-		fs.closeSync(inFile);
-		fs.closeSync(outFile);
+    inFile = path.normalize(inFile);
+    outFile = path.normalize(outDir + "/" + fileName);
+    if (!path.existsSync(inFile)) {
+      // Could not find file to copy, ignoring: ' + inFile
+      // Should we log or safe to ignore?
+      return;
+    };
+    fs.createReadStream(inFile).pipe(fs.createWriteStream(outFile));
 	},
 
 	/**
@@ -186,7 +183,7 @@ IO = {
 			}
 		}
 	},
-	
+
 	/**
 	 * Creates a directory at the given path.
 	 */
@@ -207,15 +204,15 @@ IO = {
 		}
 		if (_path.length == 0) return _allFiles;
 		if (recurse === undefined) recurse = 1;
-		
+
 		var s = fs.statSync(dir);
 		if (!s.isDirectory()) return [dir];
 		var files = fs.readdirSync(dir);
-		
+
 		for (var f = 0; f < files.length; f++) {
 			var file = files[f];
 			if (file.match(/^\.[^\.\/\\]/)) continue; // skip dot files
-	
+
 			if ((fs.statSync(_path.join("/")+"/"+file).isDirectory())) { // it's a directory
 				_path.push(file);
 				if (_path.length-1 < recurse) IO.ls(_path.join("/"), recurse, _allFiles, _path);
@@ -225,7 +222,7 @@ IO = {
 				_allFiles.push((_path.join("/")+"/"+file).replace("//", "/"));
 			}
 		}
-	
+
 		return _allFiles;
 	},
 
@@ -242,7 +239,7 @@ IO = {
 	},
 
 	/**
-	 * 
+	 *
 	 */
 	open: function(/**string*/ path, /**boolean*/ append) {
 		if(append == null) append = true;
@@ -271,21 +268,21 @@ IO = {
 	 * @private
 	 */
 	encoding: "utf8",
-	
+
 	/**
 	 * Load the given script.
 	 */
 	include: function(relativePath) {
 		load(SYS.pwd+relativePath);
 	},
-	
+
 	/**
 	 * Loads all scripts from the given directory path.
 	 */
 	includeDir: function(path) {
 		if (!path) return;
-		
-		for (var lib = IO.ls(SYS.pwd+path), i = 0; i < lib.length; i++) 
+
+		for (var lib = IO.ls(SYS.pwd+path), i = 0; i < lib.length; i++)
 			if (/\.js$/i.test(lib[i])) load(lib[i]);
 	}
 }
