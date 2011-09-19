@@ -1,4 +1,4 @@
-#!/usr/bin/node
+#!/usr/bin/env node
 /**
  * @fileOverview
  * A bootstrap script that creates some basic required objects
