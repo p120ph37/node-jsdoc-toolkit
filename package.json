@@ -2,7 +2,7 @@
   "author": "Kaleb Hornsby <kaleb@hornsby.ws> (kaleb.hornsby.ws)",
   "name": "jsdoc",
   "description": "JSDoc Toolkit",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "kaleb.hornsby.ws/jsdoc",
   "repository": {
     "type": "git",
