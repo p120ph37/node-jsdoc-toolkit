@@ -561,6 +561,17 @@ JSDOC.Symbol.prototype.setTags = function() {
 		// todo
 	*/
 		
+  // @enum
+	var enums = this.comment.getTag("enum");
+	if (enums.length) {
+		this.classDesc = enums[0].desc;
+		this.isNamespace = true;
+	}
+	
+	/*t:
+	  // TODO
+  */
+		
 	if (JSDOC.PluginManager) {
 		JSDOC.PluginManager.run("onSetTags", this);
 	}
