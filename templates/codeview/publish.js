@@ -205,11 +205,13 @@ function makeSignature(params) {
 	+
 	params.filter(
 		function($) {
-			return $.name.indexOf(".") == -1; // don't show config params in signature
+      return !/\w+\.\w+/.test($.name);
 		}
 	).map(
 		function($) {
-			return $.name;
+      var name = $.isOptional ?
+          '[' + $.name + ']' : $.name;
+			return name;
 		}
 	).join(", ")
 	+
