@@ -203,13 +203,11 @@ function makeSignature(params) {
 	if (!params) return "()";
 	var signature = "("
 	+
-	params.filter(
+	params.map(
 		function($) {
-			return $.name.indexOf(".") == -1; // don't show config params in signature
-		}
-	).map(
-		function($) {
-			return $.name;
+      var name = $.isOptional ?
+          '[' + $.name + ']': $.name;
+			return name;
 		}
 	).join(", ")
 	+
