@@ -20,7 +20,7 @@ var markdownDescPlugin = {
   onDocCommentTags: function(doc) {
     for(var i in doc.tags) {
       var tag = doc.tags[i];
-      if(tag.title == 'class' && tag.desc != '') {
+      if(tag.title == 'readme' && tag.desc != '') {
         var converter = new Showdown.converter();
         tag.desc = converter.makeHtml(tag.desc);
       }

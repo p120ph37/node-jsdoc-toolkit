@@ -20,6 +20,7 @@ JSDOC.Symbol.prototype.init = function() {
 	this.augments = [];
 	this.author = "";
 	this.classDesc = "";
+	this.readme = "";
 	this.comment = {};
 	this.defaultValue = undefined;
 	this.deprecated = "";
@@ -263,6 +264,11 @@ JSDOC.Symbol.prototype.setTags = function() {
 	if (classes.length) {
 		this.isa = "CONSTRUCTOR";
 		this.classDesc = classes[0].desc; // desc can't apply to the constructor as there is none.
+	}
+
+	var readmes = this.comment.getTag("readme");
+	if (readmes.length) {
+		this.readme = readmes[0].desc;
 	}
 	
 	/*t:
