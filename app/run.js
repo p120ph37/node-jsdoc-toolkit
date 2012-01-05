@@ -10,12 +10,12 @@
 // load the node.js libraries to be abstracted
 var fs = require('fs');
 var path = require('path');
-var NodeScript = process.binding('evals').NodeScript;
+var Script = require('vm').Script;
 
 // define a few globals to be compatible with jsrun.jar
 global.arguments = global.internal_args || process.argv.slice(2);
 load = function(file) {
-	NodeScript.runInThisContext(fs.readFileSync(file), file);
+	Script.runInThisContext(fs.readFileSync(file), file);
 };
 print = console.log;
 quit = process.exit;
