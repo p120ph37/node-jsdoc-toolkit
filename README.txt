@@ -1,5 +1,4 @@
-
-This fork just updates package.json to use node >= 04.10, publishes as a new npm package "json-toolkit"
+This fork just updates package.json to use node >= 04.10, publishes as a new npm package "jsdoc-toolkit"
 
 ======================================================================
 
