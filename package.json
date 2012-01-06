@@ -2,7 +2,7 @@
   "author": "Taka Kojima <taka@gigafied.com> (taka@gigafied.com)",
   "name": "jsdoc-toolkit",
   "description": "JSDoc Toolkit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "kaleb.hornsby.ws/jsdoc",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
     "test": "app/test.js"
   },
   "engines": {
-    "node": "0.4"
+    "node": ">= 0.4"
   },
   "dependencies": {},
   "devDependencies": {}
