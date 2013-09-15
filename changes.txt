@@ -2,6 +2,7 @@
   * Fixes logging to files. It works now.
   * Creates files in `node_modules/.bin` so global installs just work.
   * Now wrapped properly so jsdoc-toolkit can be called from scripts in node.
+  * Fixed scripts.test field so npm test works.
 
 == 2.4.0n ==
   * Ported to run on Node.JS
