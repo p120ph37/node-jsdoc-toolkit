@@ -135,6 +135,8 @@ SYS.pwd = __dirname+SYS.slash;
 
 /**
  * Shims java.io.FileWriter
+ * @class Shims java.io.FileWriter
+ * @author <a href="mailto:matthewkastor@gmail.com">Matthew Kastor</a>
  */
 FileWriter = function () {
     this.lock = undefined;
