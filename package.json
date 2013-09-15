@@ -18,7 +18,7 @@
   "main": "app/nodemodule.js",
   "bin": "app/noderun.js",
   "scripts": {
-    "test": "node app/test.js"
+    "test": "node app/run.js -T"
   },
   "engines": {
     "node": ">= 0.4"

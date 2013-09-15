@@ -96,7 +96,7 @@ TESTING:
 To run the suite of unit tests included with JsDoc Toolkit enter this
 on the command line:
 
-jsdoc-toolkit -T
+npm test
 
 To see a dump of the internal data structure that JsDoc Toolkit has
 built from your source files use this command:
