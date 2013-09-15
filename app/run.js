@@ -12,6 +12,9 @@ var fs = require('fs');
 var path = require('path');
 var Script = require('vm').Script;
 
+// default template directory.
+process.env.JSDOCTEMPLATEDIR = path.resolve(__dirname, '../templates/jsdoc/');
+
 // define a few globals to be compatible with jsrun.jar
 global.arguments = global.internal_args || process.argv.slice(2);
 load = function(file) {
