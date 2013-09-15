@@ -1,16 +1,24 @@
 {
   "author": "Taka Kojima <taka@gigafied.com> (taka@gigafied.com)",
+  "contributors" : [
+    {
+      "name" : "Matthew Kastor",
+      "email" : "matthewkastor@gmail.com",
+      "url" : "http://matthewkastor.blogspot.com"
+    }
+  ],
   "name": "jsdoc-toolkit",
   "description": "JSDoc Toolkit",
-  "version": "0.0.2",
+  "version": "2.4.0n1",
   "homepage": "kaleb.hornsby.ws/jsdoc",
   "repository": {
     "type": "git",
     "url": "git://github.com/gigafied/node-jsdoc-toolkit.git"
   },
-  "main": "app/run.js",
+  "main": "app/nodemodule.js",
+  "bin": "app/noderun.js",
   "scripts": {
-    "test": "app/test.js"
+    "test": "node app/test.js"
   },
   "engines": {
     "node": ">= 0.4"

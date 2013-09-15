@@ -133,7 +133,68 @@ SYS.slash = "/";
  */
 SYS.pwd = __dirname+SYS.slash;
 
-
+/**
+ * Shims java.io.FileWriter
+ */
+FileWriter = function () {
+    this.lock = undefined;
+    this.writeStream = undefined;
+};
+/**
+ * Opens a file for writing only.
+ * @param {String} path The path to the file to write.
+ * @param {Boolean} [append = true] If set to false the file will be overwritten.
+ * @returns {FileWriter} returns a new FileWriter instance whose writeStream is
+ *  set to the file at the given path.
+ * @see <a href="http://nodejs.org/api/fs.html#fs_class_fs_writestream">
+ *  fs.WriteStream</a>
+ */
+FileWriter.prototype.open = function(/**string*/ path, /**boolean*/ append) {
+    if(append == null) append = true;
+    this.writeStream = fs.createWriteStream(path, {flags: (append ? "a" : "w")});
+    return this;
+};
+/**
+ * Closes the write stream.
+ */
+FileWriter.prototype.close = function () {
+    this.writeStream.end();
+};
+/**
+ * No op. The data is flushed when close is called.
+ */
+FileWriter.prototype.flush = function () {
+    // no op, data is flushed when the writeStream's end
+    // method is called.
+};
+/**
+ * Write stream is created with default encoding (utf8). If the open method is
+ *  changed to allow specifying an encoding then it will need to be tracked and
+ *  returned by this method.
+ * @returns "utf8"
+ */
+FileWriter.prototype.getEncoding = function () {
+    return "utf8";
+};
+/**
+ * Appends a substring of the given string to the file.
+ * @param {String} str The string to write.
+ * @param {Number} [from = 0] The beginning of the substring of str.
+ * @param {Number} [to = str.length] The end of the substring of str.
+ */
+FileWriter.prototype.append = function (str, from, to) {
+    from = from || 0;
+    to = to || str.length;
+    str = str.substr(from, to);
+    this.write(str, 'utf8');
+};
+/**
+ * Writes the given data to the file.
+ * @param {String} str The string to write.
+ */
+FileWriter.prototype.write = function (str) {
+    this.writeStream.write(str, 'utf8');
+};
 /**
  * @namespace A collection of functions that deal with reading a writing to disk.
  */
@@ -239,11 +300,11 @@ IO = {
 	},
 
 	/**
-	 *
+	 * Opens a file for writing
 	 */
 	open: function(/**string*/ path, /**boolean*/ append) {
-		if(append == null) append = true;
-		return fs.createWriteStream(path, {flags: (append ? "a" : "w")});
+		var file = new FileWriter();
+        return file.open(path, append);
 	},
 
 	/**

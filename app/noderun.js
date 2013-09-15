@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 
 var toolkit = require("./nodemodule").jsdoctoolkit;
-toolkit.run(process.argv);
+toolkit.run(process.argv.slice(2));
