@@ -9,7 +9,7 @@
   ],
   "name": "jsdoc-toolkit",
   "description": "JSDoc Toolkit",
-  "version": "2.4.0n1",
+  "version": "2.5",
   "homepage": "kaleb.hornsby.ws/jsdoc",
   "repository": {
     "type": "git",
