@@ -251,7 +251,7 @@ function callTemplate(name, data) {
 }
 
 function methodNameEscape(name) {
-	if (/delete/.test(name))
+	if (/^delete$/.test(name))
         return '"delete"';
     else
         return name;
