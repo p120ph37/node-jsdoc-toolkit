@@ -1,15 +1,15 @@
 {
   "author": "Taka Kojima <taka@gigafied.com> (taka@gigafied.com)",
-  "contributors" : [
+  "contributors": [
     {
-      "name" : "Matthew Kastor",
-      "email" : "matthewkastor@gmail.com",
-      "url" : "http://matthewkastor.blogspot.com"
+      "name": "Matthew Kastor",
+      "email": "matthewkastor@gmail.com",
+      "url": "http://matthewkastor.blogspot.com"
     }
   ],
   "name": "jsdoc-toolkit",
   "description": "JSDoc Toolkit",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "homepage": "kaleb.hornsby.ws/jsdoc",
   "repository": {
     "type": "git",
