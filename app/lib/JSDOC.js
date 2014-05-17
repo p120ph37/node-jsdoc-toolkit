@@ -48,7 +48,7 @@ JSDOC.VERSION = "2.4.0";
 
 /** Print out usage information and quit. */
 JSDOC.usage = function() {
-	print("USAGE: java -jar jsrun.jar app/run.js [OPTIONS] <SRC_DIR> <SRC_FILE> ...");
+	print("USAGE: node app/run.js [OPTIONS] <SRC_DIR> <SRC_FILE> ...");
 	print("");
 	print("OPTIONS:");
 	print("  -a or --allfunctions\n          Include all functions, even undocumented ones.\n");

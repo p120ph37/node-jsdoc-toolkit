@@ -1,3 +1,5 @@
+This fork just updates package.json to use node >= 04.10, publishes as a new npm package "jsdoc-toolkit"
+
 ======================================================================
 
 DESCRIPTION:
@@ -26,28 +28,63 @@ Node.JS interpreter http://nodejs.org
 
 ======================================================================
 
+INSTALLATION:
+
+`npm install jsdoc-toolkit`
+
+or, you can install it globally and have it available for all your projects.
+
+`npm install jsdoc-toolkit -g`
+
+Make sure to add your global `node_modules/.bin` directory to your path for
+convenient access to your global packages from the command line.
+
+======================================================================
+
 USAGE:
 
-Before running the JsDoc Toolkit app you should change your current
-working directory to the jsdoc-toolkit folder. Then follow the
-examples below, or as shown on the project wiki.
+From Scripts:
 
-On Mac OS X or Linux the command would look like this:
+This module exports jsdoctoolkit, it has a run method that accepts a single
+argument: an array of strings corresponding to the exact command line arguments
+you would use, in the same order as you would give them on the command line.
 
-$ app/run.js -a -t=templates/jsdoc mycode.js
+```
+var jsdocToolkit = require('jsdoc-toolkit').jsdoctoolkit;
 
-The above assumes your current working directory contains the "app"
-and "templates" subdirectories from the standard JsDoc Toolkit
-distribution and that the relative path to the code you wish to
-document is "mycode.js".
+jsdocToolkit.run(['--help']);
+```
 
-The output documentation files will be saved to a new directory named
-"out" (by default) in the current directory, or if you specify a
--d=somewhere_else option, to the somewhere_else directory.
+```
+var jsdocToolkit = require('jsdoc-toolkit').jsdoctoolkit;
+var argz = [
+    "-d=./docs/",  // output directory for documentation.
+    "-o=./jsdoc-toolkit-log.txt" // file for logging messages like warnings.
+    "cli.js" // the file or directory to generate documentation for.
+];
+jsdocToolkit.run(argz);
+```
+
+Command line:
+
+Given a file named mycode.js that you want documented:
+
+if you've installed this package globally it's as easy as running
+
+`jsdoc-toolkit -a mycode.js`
+
+If you have installed jsdoc-toolkit into your package instead, from the package
+root run
+
+`node_modules/.bin/jsdoc-toolkit -a mycode.js`
+
+In both cases the output documentation files will be saved to a new directory
+named "out" (by default) in the current directory, or if you specify a
+`-d=somewhere_else` option, to the somewhere_else directory.
 
 For help (usage notes) enter this on the command line:
 
-$ app/run.js --help
+`jsdoc-toolkit --help`
 
 More information about the various command line options used by JsDoc
 Toolkit are available on the project wiki.
@@ -59,12 +96,12 @@ TESTING:
 To run the suite of unit tests included with JsDoc Toolkit enter this
 on the command line:
 
-$ app/run.js -T
+npm test
 
 To see a dump of the internal data structure that JsDoc Toolkit has
 built from your source files use this command:
 
-$ app/run.js mycode.js -Z
+jsdoc-toolkit mycode.js -Z
 
 ======================================================================
 

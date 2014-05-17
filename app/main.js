@@ -44,9 +44,8 @@ function main() {
 	}
 	else {
 		// a template must be defined and must be a directory path
-		if (!JSDOC.opt.t && process.env.JSDOCTEMPLATEDIR) {
-			JSDOC.opt.t = process.env.JSDOCTEMPLATEDIR;
-		}
+        JSDOC.opt.t = JSDOC.opt.t || process.env.JSDOCTEMPLATEDIR;
+        // adds trailing slash to template dir if not present
 		if (JSDOC.opt.t && SYS.slash != JSDOC.opt.t.slice(-1)) {
 			JSDOC.opt.t += SYS.slash;
 		}
