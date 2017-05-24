@@ -25,7 +25,7 @@
 		
 		<div class="intro">
 			<p class="description summary">
-				{+resolveLinks(data.classDesc)+}
+				{+resolveLinks(data.readme)+}
 			</p>
 				
 			<if test="data.version || !data.isBuiltin() || data.augments.length">
@@ -178,7 +178,7 @@
 										if (member.isStatic) output += "&lt;static&gt; ";
 									!}&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name.replace(/\^\d+$/, ''))+}</b>{+makeSignature(member.params)+}
+										<div class="fixedFont"><!--<if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if>--><b>{+new Link().toSymbol(member.alias).withText(member.name.replace(/\^\d+$/, ''))+}</b>{+makeSignature(member.params)+}
 										</div>
 										<div class="description">{+resolveLinks(summarize(member.desc))+}</div>
 									</td>
@@ -314,14 +314,27 @@
 					</if>
 				
 					<if test="data.params.length">
+						<span class="param-heading">Parameters:</span>
 						<dl class="detailList params">
-							<dt class="heading">Parameters:</dt>
 							<for each="item" in="data.params">
-								<dt>
-									{+((item.type)?""+("<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type)+"}</span> ")) : "")+} <b>{+item.name+}</b>
-									<if test="item.isOptional"><i>Optional<if test="item.defaultValue">, Default: {+item.defaultValue+}</if></i></if>
+								<div class="item">
+								{!
+									var name = item.name;
+									var prefix;
+									if(item.name.indexOf(".") > 0) {
+										name = item.name.substring(item.name.indexOf('.')+1);
+										prefix = item.name.substring(0, item.name.indexOf('.')+1);
+									}
+								!}
+								{+((prefix)?"<dt class=\"sub-object\">" : "<dt>")+}
+									<if test="prefix"><span class="prefix">{+prefix+}</span></if>
+									<b>{+name+}</b>
+									{+((item.type)?"<span class=\"type "+(new Link().toSymbol(item.type))+" fixedFont\">"+(new Link().toSymbol(item.type))+"</span> " : "")+}
+									<if test="item.isOptional"><span class="optional">Optional</span></if>
+									<if test="item.defaultValue"><span class="optional">Default: {+item.defaultValue+}</span></if>
 								</dt>
 								<dd>{+resolveLinks(item.desc)+}</dd>
+								</div>
 							</for>
 						</dl>
 					</if>
@@ -343,7 +356,8 @@
 								<dt class="heading">Throws:</dt>
 								<for each="item" in="data.exceptions">
 									<dt>
-										{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+} <b>{+item.name+}</b>
+										{+((item.type)?"<span class=\"type "+(new Link().toSymbol(item.type))+" fixedFont\">"+(new Link().toSymbol(item.type))+"</span> " : "")+}
+										<b>{+item.name+}</b>
 									</dt>
 										<dd>{+resolveLinks(item.desc)+}</dd>
 								</for>
@@ -352,7 +366,7 @@
 							<if test="data.returns.length">
 								<dt class="heading">Returns:</dt>
 								<for each="item" in="data.returns">
-										<dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+}</dd>
+										<dd>{+((item.type)?"<span class=\"type "+(new Link().toSymbol(item.type))+" fixedFont\">"+(new Link().toSymbol(item.type))+"</span> " : "")+}</dd>
 								</for>
 							</if>
 							
@@ -443,7 +457,6 @@
 							</dl>
 						</if>
 						
-						<if test="!$member_last"><div class="hr"></div></if>
 					</for>
 				</div>
 			</div>
@@ -470,17 +483,15 @@
 								!}
 							>
 								<div class="fixedFont heading" id="{+Link.symbolNameToLinkName(member)+}">
-									<span class='lighter'>
-									{!
-										if (member.isPrivate) output += "&lt;private&gt; ";
-										if (member.isInner) output += "&lt;inner&gt; ";
-										if (member.isStatic) output += "&lt;static&gt; ";
-									!}
-									</span>
+									
 									
 									<if test="member.type"><span class="light">{{+new Link().toSymbol(member.type)+}}</span></if>
 									
-									<if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if><b>{+member.name.replace(/\^\d+$/, '')+}</b>{+makeSignature(member.params)+}
+									<!--<if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if>-->
+									<b>{+member.name.replace(/\^\d+$/, '')+}</b>{+makeSignature(member.params)+}
+									<if test="member.isPrivate"><span class="private">private</span></if>
+									<if test="member.isInner"><span class="inner">inner</span></if>
+									<if test="member.isStatic"><span class="static">static</span></if>
 								</div>
 								
 								<div class="description">
@@ -496,19 +507,32 @@
 								
 								<if test="member.example.length">
 									<for each="example" in="member.example">
-										<pre class="code">{+example+}</pre>
+										<pre><code class="prettyprint lang-js">{+example+}</code></pre>
 									</for>
 								</if>
 								
 								<if test="member.params.length">
+									<span class="param-heading">Parameters:</span>
 									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
 										<for each="item" in="member.params">
-											<dt>
-												{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}<b>{+item.name+}</b>
-												<if test="item.isOptional"><i>Optional<if test="item.defaultValue">, Default: {+item.defaultValue+}</if></i></if>
+											<div class="item">
+											{!
+												var name = item.name;
+												var prefix;
+												if(item.name.indexOf(".") > 0) {
+													name = item.name.substring(item.name.indexOf('.')+1);
+													prefix = item.name.substring(0, item.name.indexOf('.')+1);
+												}
+											!}
+											{+((prefix)?"<dt class=\"sub-object\">" : "<dt>")+}
+												<if test="prefix"><span class="prefix">{+prefix+}</span></if>
+												<b>{+name+}</b>
+												{+((item.type)?"<span class=\"type "+(new Link().toSymbol(item.type))+" fixedFont\">"+(new Link().toSymbol(item.type))+"</span> " : "")+}
+												<if test="item.isOptional"><span class="optional">Optional</span></if>
+												<if test="item.defaultValue"><span class="optional">Default: {+item.defaultValue+}</span></if>
 											</dt>
 											<dd>{+resolveLinks(item.desc)+}</dd>
+											</div>
 										</for>
 									</dl>
 								</if>
@@ -532,7 +556,8 @@
 											<dt class="heading">Throws:</dt>
 											<for each="item" in="member.exceptions">
 												<dt>
-													{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+} <b>{+item.name+}</b>
+													{+((item.type)?"<span class=\"type "+(new Link().toSymbol(item.type))+" fixedFont\">"+(new Link().toSymbol(item.type))+"</span> " : "")+}
+													<b>{+item.name+}</b>
 												</dt>
 												<dd>{+resolveLinks(item.desc)+}</dd>
 											</for>
@@ -541,7 +566,7 @@
 										<if test="member.returns.length">
 											<dt class="heading">Returns:</dt>
 											<for each="item" in="member.returns">
-												<dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+}</dd>
+												<dd>{+((item.type)?"<span class=\"type "+(new Link().toSymbol(item.type))+" fixedFont\">"+(new Link().toSymbol(item.type))+"</span> " : "")+}</dd>
 											</for>
 										</if>
 										
@@ -561,7 +586,6 @@
 									
 									</dl>
 								</if>
-								<if test="!$member_last"><div class="hr"></div></if>
 							</li>
 						</for>
 					</ul>
@@ -612,14 +636,27 @@
 						</if>
 						
 						<if test="member.params.length">
+							<span class="param-heading">Parameters:</span>
 							<dl class="detailList params">
-								<dt class="heading">Parameters:</dt>
 								<for each="item" in="member.params">
-									<dt>
-										{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}<b>{+item.name+}</b>
-										<if test="item.isOptional"><i>Optional<if test="item.defaultValue">, Default: {+item.defaultValue+}</if></i></if>
+									<div class="item">
+									{!
+										var name = item.name;
+										var prefix;
+										if(item.name.indexOf(".") > 0) {
+											name = item.name.substring(item.name.indexOf('.')+1);
+											prefix = item.name.substring(0, item.name.indexOf('.')+1);
+										}
+									!}
+									{+((prefix)?"<dt class=\"sub-object\">" : "<dt>")+}
+										<if test="prefix"><span class="prefix">{+prefix+}</span></if>
+										<b>{+name+}</b>
+										{+((item.type)?"<span class=\"type "+(new Link().toSymbol(item.type))+" fixedFont\">"+(new Link().toSymbol(item.type))+"</span> " : "")+}
+										<if test="item.isOptional"><span class="optional">Optional</span></if>
+										<if test="item.defaultValue"><span class="optional">Default: {+item.defaultValue+}</span></if>
 									</dt>
 									<dd>{+ resolveLinks(item.desc) +}</dd>
+									</div>
 								</for>
 							</dl>
 						</if>
@@ -640,7 +677,8 @@
 									<dt class="heading">Throws:</dt>
 									<for each="item" in="member.exceptions">
 										<dt>
-											{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+} <b>{+item.name+}</b>
+											{+((item.type)?"<span class=\"type "+(new Link().toSymbol(item.type))+" fixedFont\">"+(new Link().toSymbol(item.type))+"</span> " : "")+}
+											<b>{+item.name+}</b>
 										</dt>
 										<dd>{+ resolveLinks(item.desc) +}</dd>
 									</for>
@@ -649,7 +687,7 @@
 								<if test="member.returns.length">
 									<dt class="heading">Returns:</dt>
 									<for each="item" in="member.returns">
-										<dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+}</dd>
+										<dd>{+((item.type)?"<span class=\"type "+(new Link().toSymbol(item.type))+" fixedFont\">"+(new Link().toSymbol(item.type))+"</span> " : "")+}</dd>
 									</for>
 								</if>
 								
@@ -669,11 +707,11 @@
 							</dl>
 						</if>
 						
-						<if test="!$member_last"><div class="hr"></div></if>
 					</for>
 				</div>
 			</div>
 		</if>
 	</div>
+</div>
 </div>
 {+subtemplate("subtemplates/foot.tmpl")+}
