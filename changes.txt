@@ -1,3 +1,10 @@
+== 2.4.0n1 ==
+  * Fixes logging to files. It works now.
+  * Creates files in `node_modules/.bin` so global installs just work.
+  * Now wrapped properly so jsdoc-toolkit can be called from scripts in node.
+  * Fixed scripts.test field so npm test works.
+  * jsdoc template is now the default so you don't have to specify it every time you use it.
+
 == 2.4.0n ==
   * Ported to run on Node.JS
 

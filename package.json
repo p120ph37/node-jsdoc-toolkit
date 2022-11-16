@@ -1,19 +1,27 @@
 {
-  "author": "Kaleb Hornsby <kaleb@hornsby.ws> (kaleb.hornsby.ws)",
-  "name": "jsdoc",
+  "author": "Taka Kojima <taka@gigafied.com> (taka@gigafied.com)",
+  "contributors": [
+    {
+      "name": "Matthew Kastor",
+      "email": "matthewkastor@gmail.com",
+      "url": "http://matthewkastor.blogspot.com"
+    }
+  ],
+  "name": "jsdoc-toolkit",
   "description": "JSDoc Toolkit",
-  "version": "0.0.1",
+  "version": "2.5.1",
   "homepage": "kaleb.hornsby.ws/jsdoc",
   "repository": {
     "type": "git",
-    "url": "git://github.com/kaleb/node-jsdoc-toolkit.git"
+    "url": "git://github.com/gigafied/node-jsdoc-toolkit.git"
   },
-  "main": "app/run.js",
+  "main": "app/nodemodule.js",
+  "bin": "app/noderun.js",
   "scripts": {
-    "test": "app/test.js"
+    "test": "node app/run.js -T"
   },
   "engines": {
-    "node": "0.4"
+    "node": ">= 0.4"
   },
   "dependencies": {},
   "devDependencies": {}
