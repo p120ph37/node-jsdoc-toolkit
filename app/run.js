@@ -10,7 +10,7 @@
 // load the node.js libraries to be abstracted
 var fs = require('fs');
 var path = require('path');
-var Script = require('vm').Script;
+var Script = require('vm');
 
 // default template directory.
 process.env.JSDOCTEMPLATEDIR = path.resolve(__dirname, '../templates/jsdoc/');
